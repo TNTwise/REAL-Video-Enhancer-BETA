@@ -77,7 +77,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ steps.version_tag.outputs.tag }}
-          release_name: Release ${{ steps.version_tag.outputs.version }}
+          release_name: Release ${{ steps.version_tag.outputs.tag }}
           draft: false
           prerelease: false
       - name: Upload Release Asset
@@ -87,7 +87,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-          asset_path: ./REAL-Video-Enhancer-Appimage.zip
+          asset_path: REAL-Video-Enhancer-AppImage/REAL-Video-Enhancer-x86_64.AppImage
           asset_name: REAL-Video-Enhancer-Appimage.zip
           asset_content_type: application/zip
         #- name: Save build as artifact
