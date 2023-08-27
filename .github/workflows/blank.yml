@@ -56,7 +56,7 @@ jobs:
       - name: Generate version and tag
         id: version_tag
         run: |
-          version=$(python -c "import random; print(f'{random.randint(1, 10)}.{random.randint(0, 10)}.{random.randint(0, 10)}')")
+          version=$(python -c "from datetime import datetime; print(datetime.now())")
           tag=$(python -c "import random, string; print(''.join(random.choices(string.ascii_letters, k=8)))")
           echo "Version=$version"
           echo "Tag=$tag"
@@ -75,7 +75,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ steps.version_tag.outputs.tag }}
-          release_name: Release ${{ steps.version_tag.outputs.tag }}
+          release_name: Release ${{ steps.version_tag.outputs.version }}
           draft: false
           prerelease: false
       
