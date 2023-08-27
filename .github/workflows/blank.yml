@@ -35,4 +35,7 @@ jobs:
         
       - name: Install python dependencies
         run: cd REAL-Video-Enhancer && python3 -m pip install -r requirements.txt
+        
+      - name: Compile to executable
+        run: make
           
