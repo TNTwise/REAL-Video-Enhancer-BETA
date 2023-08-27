@@ -57,7 +57,15 @@ jobs:
 
       - name: Log
         run: ls
-      
+      - name: Generate version and tag
+        id: version_tag
+        run: |
+          version=$(python -c "import random; print(f'{random.randint(1, 10)}.{random.randint(0, 10)}.{random.randint(0, 10)}')")
+          tag=$(python -c "import random, string; print(''.join(random.choices(string.ascii_letters, k=8)))")
+          echo "Version=$version"
+          echo "Tag=$tag"
+          echo "::set-output name=version::$version"
+          echo "::set-output name=tag::$tag"
       - name: Checkout code
         uses: actions/checkout@v3
       - name: Log
@@ -65,15 +73,14 @@ jobs:
       - name: Build project # This would actually build your project, using zip for an example artifact
         run: |
           zip --junk-paths REAL-Video-Enhancer-AppImage/REAL-Video-Enhancer-x86_64.AppImage README.md
-      
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: 1
-          release_name: 1
+          tag_name: ${{ steps.version_tag.outputs.tag }}
+          release_name: Release ${{ steps.version_tag.outputs.tag }}
           draft: false
           prerelease: false
       - name: Upload Release Asset
@@ -85,7 +92,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-          asset_path: ./REAL-Video-Enhancer-Appimage.zip
+          asset_path: ../REAL-Video-Enhancer-AppImage/REAL-Video-Enhancer-x86_64.AppImage
           asset_name: REAL-Video-Enhancer-Appimage.zip
           asset_content_type: application/zip
         #- name: Save build as artifact
