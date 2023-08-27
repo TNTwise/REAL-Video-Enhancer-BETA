@@ -43,15 +43,23 @@ jobs:
         run: git clone https://github.com/TNTwise/REAL-Video-Enhancer-AppImage.git
 
       - name: Move files
-        run: rm -rf REAL-Video-Enhancer-AppImage/REAL-Video-Enhancer.AppDir/usr/bin/* && mv REAL-Video-Enhancer/dist/* REAL-Video-Enhancer-AppImage/REAL-Video-Enhancer.AppDir/usr/bin/ && mv REAL-Video-Enhancer-AppImage/REAL-Video-Enhancer.AppDir/usr/bin/main REAL-Video-Enhancer-AppImage/REAL-Video-Enhancer.AppDir/usr/bin/REAL-Video-Enhancer      
+        run: mkdir -p REAL-Video-Enhancer-AppImage/REAL-Video-Enhancer.AppDir/usr/bin/ && mv REAL-Video-Enhancer/dist/* REAL-Video-Enhancer-AppImage/REAL-Video-Enhancer.AppDir/usr/bin/ && mv REAL-Video-Enhancer-AppImage/REAL-Video-Enhancer.AppDir/usr/bin/main REAL-Video-Enhancer-AppImage/REAL-Video-Enhancer.AppDir/usr/bin/REAL-Video-Enhancer      
 
       - name: Make appimage
         run: chmod +x REAL-Video-Enhancer-AppImage/appimagetool-x86_64.AppImage && cd REAL-Video-Enhancer-AppImage/ && ./appimagetool-x86_64.AppImage REAL-Video-Enhancer.AppDir/ 
-      - name: Archive code coverage results
+      
+      - name: Save AppImage as artifact
         uses: actions/upload-artifact@v3
         with:
           name: REAL-Video-Enhancer-Appimage
           path: REAL-Video-Enhancer-AppImage/REAL-Video-Enhancer-x86_64.AppImage
+          
+      - name: Save build as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: BUILD
+          path: REAL-Video-Enhancer-AppImage/REAL-Video-Enhancer.AppDir/usr/bin/*
+
 
 
 
