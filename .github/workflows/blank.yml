@@ -71,8 +71,7 @@ jobs:
       - name: Log
         run: ls
       - name: Build project # This would actually build your project, using zip for an example artifact
-        run: |
-          zip --junk-paths REAL-Video-Enhancer-Appimage README.md
+        
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
