@@ -83,6 +83,8 @@ jobs:
           release_name: Release ${{ steps.version_tag.outputs.tag }}
           draft: false
           prerelease: false
+      - name: Log
+        run: cd ../ && ls
       - name: Upload Release Asset
         
         id: upload-release-asset 
@@ -95,8 +97,7 @@ jobs:
           asset_path: ../REAL-Video-Enhancer-AppImage
           asset_name: REAL-Video-Enhancer-Appimage.zip
           asset_content_type: application/zip
-      - name: Log
-        run: cd ../ && ls
+      
         #- name: Save build as artifact
          # uses: actions/upload-artifact@v3
           #with:
