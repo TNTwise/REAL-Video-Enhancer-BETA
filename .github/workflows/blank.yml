@@ -61,7 +61,7 @@ jobs:
         uses: actions/checkout@v3
       - name: Build project # This would actually build your project, using zip for an example artifact
         run: |
-          zip --junk-paths REAL-Video-Enhancer README.md
+          zip --junk-paths REAL-Video-Enhancer-Appimage README.md
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -79,8 +79,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-          asset_path: ./REAL-Video-Enhancer.zip
-          asset_name: REAL-Video-Enhancer.zip
+          asset_path: ./REAL-Video-Enhancer-Appimage.zip
+          asset_name: REAL-Video-Enhancer-Appimage.zip
           asset_content_type: application/zip
         #- name: Save build as artifact
          # uses: actions/upload-artifact@v3
