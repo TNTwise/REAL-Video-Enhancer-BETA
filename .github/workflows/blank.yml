@@ -53,8 +53,9 @@ jobs:
         with:
           name: REAL-Video-Enhancer-Appimage
           path: REAL-Video-Enhancer-AppImage/REAL-Video-Enhancer-x86_64.AppImage
+          
       - name: Zip file
-        run: zip REAL-Video-Enhancer-AppImage/REAL-Video-Enhancer-x86_64.AppImage REAL-Video-Enhancer-x86_64.AppImage
+        run: zip REAL-Video-Enhancer-x86_64.AppImage.zip REAL-Video-Enhancer-AppImage/REAL-Video-Enhancer-x86_64.AppImage
 
       - name: Log
         run: ls
