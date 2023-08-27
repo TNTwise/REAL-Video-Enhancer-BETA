@@ -53,11 +53,11 @@ jobs:
           name: REAL-Video-Enhancer-Appimage
           path: REAL-Video-Enhancer-AppImage/REAL-Video-Enhancer-x86_64.AppImage
           
-      - name: Save build as artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: BUILD
-          path: REAL-Video-Enhancer-AppImage/REAL-Video-Enhancer.AppDir/usr/bin/*
+      #- name: Save build as artifact
+       # uses: actions/upload-artifact@v3
+        #with:
+         # name: BUILD
+          #path: REAL-Video-Enhancer-AppImage/REAL-Video-Enhancer.AppDir/usr/bin/*
 
 
 
