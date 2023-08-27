@@ -66,8 +66,7 @@ jobs:
           echo "Tag=$tag"
           echo "::set-output name=version::$version"
           echo "::set-output name=tag::$tag"
-      - name: Checkout code
-        uses: actions/checkout@v3
+      
       - name: Log
         run: ls
       - name: Build project # This would actually build your project, using zip for an example artifact
@@ -83,8 +82,7 @@ jobs:
           release_name: Release ${{ steps.version_tag.outputs.tag }}
           draft: false
           prerelease: false
-      - name: Log
-        run: cd ../ && ls
+      
       - name: Upload Release Asset
         
         id: upload-release-asset 
