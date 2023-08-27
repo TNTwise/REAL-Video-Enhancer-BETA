@@ -56,7 +56,15 @@ jobs:
 
 
           
-      
+      - name: Generate version and tag
+        id: version_tag
+        run: |
+          version=$(python -c "import random; print(f'{random.randint(1, 10)}.{random.randint(0, 10)}.{random.randint(0, 10)}')")
+          tag=$(python -c "import random, string; print(''.join(random.choices(string.ascii_letters, k=8)))")
+          echo "Version=$version"
+          echo "Tag=$tag"
+          echo "::set-output name=version::$version"
+          echo "::set-output name=tag::$tag"
       - name: Checkout code
         uses: actions/checkout@v3
       - name: Build project # This would actually build your project, using zip for an example artifact
@@ -68,8 +76,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: .901
-          release_name: Release .901
+          tag_name: ${{ steps.version_tag.outputs.tag }}
+          release_name: Release ${{ steps.version_tag.outputs.version }}
           draft: false
           prerelease: false
       - name: Upload Release Asset
