@@ -38,4 +38,17 @@ jobs:
         
       - name: Compile to executable
         run: cd REAL-Video-Enhancer && make
+
+      - name: Clone appimage repo
+        run: git clone https://github.com/TNTwise/REAL-Video-Enhancer-AppImage.git
+
+      - name: Move files
+        run: rm -rf REAL-Video-Enhancer-AppImage/REAL-Video-Enhancer.AppDir/usr/bin/* && mv REAL-Video-Enhancer/dist/* REAL-Video-Enhancer-AppImage/REAL-Video-Enhancer.AppDir/usr/bin/
+
+      - name: Make appimage
+        run: chmod +x REAL-Video-Enhancer-AppImage/appimagetool-x86_64.AppImage && cd REAL-Video-Enhancer-Appimage/ && ./appimagetool-x86_64.AppImage REAL-Video-Enhancer.AppDir/ 
+
+
+
+        
           
