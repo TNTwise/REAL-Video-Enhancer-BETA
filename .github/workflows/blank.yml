@@ -67,11 +67,13 @@ jobs:
         run: |
           version=$(python -c "from datetime import datetime; print(datetime.now())")
           tag=$(python -c "import random, string; print(''.join(random.choices(string.ascii_letters, k=8)))")
+          commitlog=$(cd REAL-Video-Enhancer && git log --since="24 hours ago" --pretty=format:"%h - %s")
           echo "Version=$version"
           echo "Tag=$tag"
+          echo "CommitLog=$commitlog"
           echo "::set-output name=version::$version"
           echo "::set-output name=tag::$tag"
-      
+          echo "::set-output name=commitlog::$commitlog"
       - name: Log
         run: ls
       - name: Build project # This would actually build your project, using zip for an example artifact
@@ -85,9 +87,10 @@ jobs:
         with:
           tag_name: ${{ steps.version_tag.outputs.tag }}
           release_name: Release ${{ steps.version_tag.outputs.version }}
+          body: ${{ steps.version_tag.outputs.commitlog }} # Use the commitlog as the release description
           draft: false
           prerelease: false
-      
+          
       - name: Upload Release Asset
         
         id: upload-release-asset 
