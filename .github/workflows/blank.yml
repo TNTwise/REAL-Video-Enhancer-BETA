@@ -74,8 +74,8 @@ jobs:
           echo "::set-output name=version::$version"
           echo "::set-output name=tag::$tag"
           echo "::set-output name=commitlog::$commitlog"
-      - name: Log
-        run: ls
+      - name: Make Commit Log
+        run: cd REAL-Video-Enhancer && git log --since="24 hours ago" --pretty=format:"%h - %s" >> ../output.log
       - name: Build project # This would actually build your project, using zip for an example artifact
         run: |
           zip --junk-paths  REAL-Video-Enhancer-Appimage README.md README.md
@@ -87,7 +87,7 @@ jobs:
         with:
           tag_name: ${{ steps.version_tag.outputs.tag }}
           release_name: Release ${{ steps.version_tag.outputs.version }}
-          body: ${{ steps.version_tag.outputs.commitlog }} # Use the commitlog as the release description
+          body_path: output.log # Use the commitlog as the release description
           draft: false
           prerelease: false
           
