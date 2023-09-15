@@ -5,8 +5,8 @@ name: CI
 # Controls when the workflow will run
 
 on:
-  schedule:
-    - cron: "0 0 * * *"
+  #schedule:
+  #  - cron: "0 0 * * *"
   push:
     branches: [ "main" ]
   pull_request:
