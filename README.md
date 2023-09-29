@@ -1,2 +1,2 @@
-# REAL-Video-Enhancer-Nighly
-Nightly builds of REAL-Video-Enhancer
+# REAL-Video-Enhancer-BETA
+BETA builds of REAL-Video-Enhancer
