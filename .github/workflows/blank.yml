@@ -64,7 +64,7 @@ jobs:
           echo "Tag=$tag"
           echo "CommitLog=$commitlog"
           echo "::set-output name=version::$version"
-          echo "::set-output name=tag::$tag"
+          echo "::set-output name=tag::$version"
           echo "::set-output name=commitlog::$commitlog"
       - name: Make Commit Log
         run: cd REAL-Video-Enhancer && git log --since="24 hours ago" --pretty=format:"%h - %s" >> ../output.log
