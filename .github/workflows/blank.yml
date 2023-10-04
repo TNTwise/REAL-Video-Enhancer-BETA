@@ -61,7 +61,7 @@ jobs:
           tag=$(python -c "import random, string; print(''.join(random.choices(string.ascii_letters, k=8)))")
           commitlog=$(cd REAL-Video-Enhancer && git log --since="24 hours ago" --pretty=format:"%h - %s")
           echo "Version=$version"
-          echo "Tag=$tag"
+          echo "Tag=$version"
           echo "CommitLog=$commitlog"
           echo "::set-output name=version::$version"
           echo "::set-output name=tag::$version"
