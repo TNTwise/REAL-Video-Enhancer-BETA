@@ -50,7 +50,27 @@ jobs:
 
       - name: Make appimage
         run: chmod +x REAL-Video-Enhancer-AppImage/appimagetool-x86_64.AppImage && cd REAL-Video-Enhancer-AppImage/ && ./appimagetool-x86_64.AppImage REAL-Video-Enhancer.AppDir/ 
-      
+      - name: Get last release
+        id: last_release
+        run: |
+          last_release_tag=$(git describe --tags --abbrev=0)
+          last_release_date=$(git log -1 --format="%aI" $last_release_tag)
+          echo "::set-output name=last_release_date::$last_release_date"
+
+      - name: Calculate time difference
+        id: calculate_time
+        run: |
+          current_date=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+          last_release_date=${{ steps.last_release.outputs.last_release_date }}
+          current_timestamp=$(date -d "$current_date" +%s)
+          release_timestamp=$(date -d "$last_release_date" +%s)
+          time_difference=$((current_timestamp - release_timestamp))
+          echo "::set-output name=time_difference::$time_difference"
+
+      - name: Display time difference
+        run: |
+          time_difference=${{ steps.calculate_time.outputs.time_difference }}
+          echo "Time since last release: $((time_difference / 86400)) days"
       
       - name: Log
         run: ls
