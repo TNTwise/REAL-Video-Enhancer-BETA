@@ -55,7 +55,7 @@ jobs:
         run: |
           last_release_tag=$(git describe --tags --abbrev=0)
           last_release_date=$(git log -1 --format="%aI" $last_release_tag)
-          echo "::set-output name=last_release_date::$last_release_date"
+          echo "::set-output last_release_date::$last_release_date"
 
       - name: Calculate time difference
         id: calculate_time
