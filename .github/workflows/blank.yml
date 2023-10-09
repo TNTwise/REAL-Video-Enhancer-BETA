@@ -31,11 +31,15 @@ jobs:
       
       - name: Checkout code
         uses: actions/checkout@v3
+        
       # Runs a single command using the runners shell
+      - name: Log
+        run: ls
       - name: Get last release
         id: last_release
+        
         run: |
-          ls
+          
           last_release_tag=$(git describe --tags --abbrev=0)
           last_release_date=$(git log -1 --format="%aI" $last_release_tag)
           echo "::set-output last_release_date::$last_release_date"
