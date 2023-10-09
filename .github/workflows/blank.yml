@@ -30,7 +30,7 @@ jobs:
       - uses: actions/checkout@v3
       
       - name: Checkout code
-        uses: actions/checkout@v3
+        run: git clone https://github.com/TNTwise/REAL-Video-Enhancer-BETA.git
         
       # Runs a single command using the runners shell
       - name: Log
@@ -39,7 +39,7 @@ jobs:
         id: last_release
         
         run: |
-          
+          cd REAL-Video-Enhancer-BETA
           last_release_tag=$(git describe --tags --abbrev=0)
           last_release_date=$(git log -1 --format="%aI" $last_release_tag)
           echo "::set-output last_release_date::$last_release_date"
