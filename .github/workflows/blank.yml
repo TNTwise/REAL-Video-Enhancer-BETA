@@ -149,7 +149,7 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
           asset_path: REAL-Video-Enhancer-AppImage/squashfs-root/usr/REAL-Video-Enhancer.tar.xz
-          asset_name: REAL-Video-Enhancer
+          asset_name: REAL-Video-Enhancer.tar.xz
           asset_content_type: application/x-tar
       
         #- name: Save build as artifact
