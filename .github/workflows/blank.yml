@@ -78,22 +78,22 @@ jobs:
       - name: Make appimage
         run: chmod +x REAL-Video-Enhancer-AppImage/appimagetool-x86_64.AppImage && cd REAL-Video-Enhancer-AppImage/ && ./appimagetool-x86_64.AppImage REAL-Video-Enhancer.AppDir/ 
      
-      - name: Save AppImage as artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: REAL-Video-Enhancer-Appimage
-          path: REAL-Video-Enhancer-AppImage/REAL-Video-Enhancer-x86_64.AppImage
+      #- name: Save AppImage as artifact
+      #  uses: actions/upload-artifact@v3
+      #  with:
+      #    name: REAL-Video-Enhancer-Appimage
+      #    path: REAL-Video-Enhancer-AppImage/REAL-Video-Enhancer-x86_64.AppImage
       
-      - name: Log
-        run: ls
+      #- name: Log
+      #  run: ls
     
       - name: extract appimage and upload artifact
         run: cd REAL-Video-Enhancer-AppImage && chmod +x REAL-Video-Enhancer-x86_64.AppImage  && ./REAL-Video-Enhancer-x86_64.AppImage --appimage-extract && cd squashfs-root/usr/ && tar -caf REAL-Video-Enhancer.tar.xz bin/ && sha256sum REAL-Video-Enhancer.tar.xz >> sha256
-      - name: Save extracted files as artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: REAL-Video-Enhancer
-          path: REAL-Video-Enhancer-AppImage/squashfs-root/usr/REAL-Video-Enhancer.tar.xz
+      #- name: Save extracted files as artifact
+      #  uses: actions/upload-artifact@v3
+      #  with:
+      #    name: REAL-Video-Enhancer
+      #    path: REAL-Video-Enhancer-AppImage/squashfs-root/usr/REAL-Video-Enhancer.tar.xz
       - name: Generate version and tag
         id: version_tag
         run: |
