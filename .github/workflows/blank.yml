@@ -74,6 +74,19 @@ jobs:
 
       - name: Move files
         run: mkdir -p REAL-Video-Enhancer-AppImage/REAL-Video-Enhancer.AppDir/usr/bin/ && mv REAL-Video-Enhancer/dist/* REAL-Video-Enhancer-AppImage/REAL-Video-Enhancer.AppDir/usr/bin/ && mv REAL-Video-Enhancer-AppImage/REAL-Video-Enhancer.AppDir/usr/bin/main REAL-Video-Enhancer-AppImage/REAL-Video-Enhancer.AppDir/usr/bin/REAL-Video-Enhancer      
+      - name: Move QT Files
+        run: | 
+          cd REAL-Video-Enhancer-AppImage/REAL-Video-Enhancer.AppDir/
+          echo $PLUGINS 
+          mkdir -p ./usr/lib/qt5/plugins/
+          cp -r $PLUGINS/bearer ./usr/lib/qt5/plugins/
+          cp -r $PLUGINS/iconengines ./usr/lib/qt5/plugins/
+          cp -r $PLUGINS/imageformats ./usr/lib/qt5/plugins/
+          cp -r $PLUGINS/platforminputcontexts ./usr/lib/qt5/plugins/
+          cp -r $PLUGINS/platforms ./usr/lib/qt5/plugins/
+          cp -r $PLUGINS/platformthemes ./usr/lib/qt5/plugins/
+          cp -r $PLUGINS/sensors ./usr/lib/qt5/plugins/
+          cp -r $PLUGINS/xcbglintegrations ./usr/lib/qt5/plugins/
 
       - name: Make appimage
         run: chmod +x REAL-Video-Enhancer-AppImage/appimagetool-x86_64.AppImage && cd REAL-Video-Enhancer-AppImage/ && ./appimagetool-x86_64.AppImage REAL-Video-Enhancer.AppDir/ 
