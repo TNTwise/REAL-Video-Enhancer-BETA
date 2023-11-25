@@ -78,7 +78,9 @@ jobs:
         run: | 
           wget https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage
           chmod +x linuxdeployqt-continuous-x86_64.AppImage
-          ./linuxdeployqt-continuous-x86_64.AppImage REAL-Video-Enhancer-AppImage/REAL-Video-Enhancer.AppDir -appimage
+          ./linuxdeployqt-continuous-x86_64.AppImage --appimage-exract
+          mv squashfs-root/usr/* REAL-Video-Enhancer-AppImage/REAL-Video-Enhancer.AppDir/usr/
+          rm -rf squashfs-root/
 
       - name: Make appimage
         run: chmod +x REAL-Video-Enhancer-AppImage/appimagetool-x86_64.AppImage && cd REAL-Video-Enhancer-AppImage/ && ./appimagetool-x86_64.AppImage REAL-Video-Enhancer.AppDir/ 
