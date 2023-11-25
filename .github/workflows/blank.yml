@@ -64,7 +64,7 @@ jobs:
         run: git clone https://github.com/TNTwise/REAL-Video-Enhancer.git
         
       - name: Install python dependencies
-        run: cd REAL-Video-Enhancer && python3 -m pip install pillow python-magic testresources requests opencv-python-headless pypresence pyuic5-tool cx_FREEZE psutil && sudo apt-get -y install python3-pyqt5
+        run: cd REAL-Video-Enhancer && python3 -m pip install pillow python-magic testresources requests opencv-python-headless pypresence pyuic5-tool cx_FREEZE psutil && sudo apt-get -y install python3-pyqt5 libqt5gui5
         
       - name: Compile to executable
         run: cd REAL-Video-Enhancer && make
