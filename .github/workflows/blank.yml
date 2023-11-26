@@ -83,10 +83,9 @@ jobs:
           chmod +x linuxdeployqt-continuous-x86_64.AppImage
           ./linuxdeployqt-continuous-x86_64.AppImage  --appimage-extract
           rm -rf squashfs-root/usr/bin 
-          rm -rf squashfs-root/usr/libQt5Core.so.5
-          cp /usr/lib/x86_64-linux-gnu/libQt5Core.so.5 REAL-Video-Enhancer-AppImage/REAL-Video-Enhancer.AppDir/usr/lib
-          rm -rf REAL-Video-Enhancer-AppImage/REAL-Video-Enhancer.AppDir/usr/lib
           mv squashfs-root/usr/* REAL-Video-Enhancer-AppImage/REAL-Video-Enhancer.AppDir/usr/
+          rm -rf squashfs-root/usr/libQt5Core.so.5
+          cp /usr/lib/x86_64-linux-gnu/libQt5Core.so.5 REAL-Video-Enhancer-AppImage/REAL-Video-Enhancer.AppDir/usr/lib/libQt5Core.so.5
           rm -rf squashfs-root/
           
 
