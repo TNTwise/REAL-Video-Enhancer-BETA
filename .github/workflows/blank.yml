@@ -92,7 +92,7 @@ jobs:
           git clone https://github.com/TNTwise/REAL-Video-Enhancer.git && cd REAL-Video-Enhancer && make
           rm -rf bin/
           mkdir bin/
-          mv dist/ bin/
+          cp -r dist/* bin/
       - name: compress archive
         run: |
           cp -r archive-build/REAL-Video-Enhancer/bin/ bin/
