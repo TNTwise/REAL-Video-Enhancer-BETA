@@ -82,10 +82,24 @@ jobs:
           rm -rf squashfs-root/usr/bin 
           mv squashfs-root/usr/* REAL-Video-Enhancer-AppImage/REAL-Video-Enhancer.AppDir/usr/
           rm -rf squashfs-root/
-
+          
       - name: Make appimage
         run: chmod +x REAL-Video-Enhancer-AppImage/appimagetool-x86_64.AppImage && cd REAL-Video-Enhancer-AppImage/ && ./appimagetool-x86_64.AppImage REAL-Video-Enhancer.AppDir/ 
-     
+      - name: Make archive
+        run: |
+          python3 -m pip uninstall PyQt5 -y && sudo apt install python3-pyqt5 -y
+          mkdir archive-build && cd archive-build
+          git clone https://github.com/TNTwise/REAL-Video-Enhancer.git && cd REAL-Video-Enhancer && make
+          rm -rf bin/
+          mkdir bin/
+          mv dist/ bin/
+      - name: compress archive
+        run: |
+          cp -r archive-build/REAL-Video-Enhancer/bin/ bin/
+          tar -caf REAL-Video-Enhancer.tar.xz bin/
+         
+       
+        
       #- name: Save AppImage as artifact
       #  uses: actions/upload-artifact@v3
       #  with:
@@ -96,7 +110,7 @@ jobs:
       #  run: ls
     
       - name: extract appimage and upload artifact
-        run: cd REAL-Video-Enhancer-AppImage && chmod +x REAL-Video-Enhancer-x86_64.AppImage  && ./REAL-Video-Enhancer-x86_64.AppImage --appimage-extract && cd squashfs-root/usr/ && tar -caf REAL-Video-Enhancer.tar.xz bin/ && sha256sum REAL-Video-Enhancer.tar.xz >> sha256
+        run: sha256sum REAL-Video-Enhancer.tar.xz >> sha256
       #- name: Save extracted files as artifact
       #  uses: actions/upload-artifact@v3
       #  with:
@@ -156,7 +170,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-          asset_path: REAL-Video-Enhancer-AppImage/squashfs-root/usr/REAL-Video-Enhancer.tar.xz
+          asset_path: REAL-Video-Enhancer.tar.xz
           asset_name: REAL-Video-Enhancer.tar.xz
           asset_content_type: application/x-tar
 
@@ -168,7 +182,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-          asset_path: REAL-Video-Enhancer-AppImage/squashfs-root/usr/sha256
+          asset_path: sha256
           asset_name: sha256
           asset_content_type: text/plain
         #- name: Save build as artifact
