@@ -33,8 +33,22 @@ jobs:
         run: git clone https://github.com/TNTwise/REAL-Video-Enhancer-BETA.git
         
       # Runs a single command using the runners shell
-      - name: Log
-        run: ls
+      - name: free_disk_space
+        run: |
+                dpkg-query -Wf '${Installed-Size}\t${Package}\n' | sort -n | tail -n 100
+                df -h
+                echo "Removing large packages"
+                sudo apt-get remove -y '^ghc-8.*'
+                sudo apt-get remove -y '^dotnet-.*'
+                sudo apt-get remove -y '^llvm-.*'
+                sudo apt-get remove -y 'php.*'
+                sudo apt-get remove -y azure-cli google-cloud-sdk hhvm google-chrome-stable firefox powershell mono-devel
+                sudo apt-get autoremove -y
+                sudo apt-get clean
+                df -h
+                echo "Removing large directories"
+                rm -rf /usr/share/dotnet/
+                df -h
       - name: Get last release
         id: last_release
         
