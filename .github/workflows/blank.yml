@@ -96,6 +96,13 @@ jobs:
       - name: Make appimage
         run: chmod +x REAL-Video-Enhancer-AppImage/appimagetool-x86_64.AppImage && cd REAL-Video-Enhancer-AppImage/ && ./appimagetool-x86_64.AppImage REAL-Video-Enhancer.AppDir/ 
       
+      - name: Make Commit Log
+      
+        run: |
+             cd REAL-Video-Enhancer 
+             time_difference=${{ 604800 }}
+             hours=$((time_difference / 3600)) # Convert seconds to hours
+             git log --since="$hours hours ago" --pretty=format:"%h - %s" >> ../output.log
       - name: Generate version and tag
         id: version_tag
         run: |
@@ -165,13 +172,7 @@ jobs:
       #    name: REAL-Video-Enhancer
       #    path: REAL-Video-Enhancer-AppImage/squashfs-root/usr/REAL-Video-Enhancer.tar.xz
       
-      - name: Make Commit Log
-      
-        run: |
-             cd REAL-Video-Enhancer 
-             time_difference=${{ 604800 }}
-             hours=$((time_difference / 3600)) # Convert seconds to hours
-             git log --since="$hours hours ago" --pretty=format:"%h - %s" >> ../output.log
+     
       - name: Build project # This would actually build your project, using zip for an example artifact
         run: |
           zip --junk-paths  REAL-Video-Enhancer-Appimage README.md README.md
