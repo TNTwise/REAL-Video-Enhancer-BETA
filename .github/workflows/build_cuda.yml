@@ -112,6 +112,9 @@ jobs:
       - name: Build project # This would actually build your project, using zip for an example artifact
         run: |
           zip --junk-paths  REAL-Video-Enhancer-Appimage README.md README.md
+      - name: hella compress this shit
+        run: |
+             tar -cf - REAL-Video-Enhancer-AppImage/REAL-Video-Enhancer-x86_64.AppImage | xz -9e > REAL-Video-Enhancer-x86_64.AppImage.tar.xz
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -123,9 +126,7 @@ jobs:
           body_path: output.log # Use the commitlog as the release description
           draft: false
           prerelease: false
-      - name: hella compress this shit
-        run: |
-             tar -cf - REAL-Video-Enhancer-AppImage/REAL-Video-Enhancer-x86_64.AppImage | xz -9e > REAL-Video-Enhancer-x86_64.AppImage.tar.xz
+      
       - name: Upload Release Asset
         
         id: upload-release-asset 
