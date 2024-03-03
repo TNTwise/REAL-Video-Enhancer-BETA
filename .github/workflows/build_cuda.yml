@@ -67,7 +67,7 @@ jobs:
         run: cd REAL-Video-Enhancer && python3 -m pip install -r requirements.txt && python3 -m pip uninstall PyQt5 -y && python3 -m  pip install py-notifier notify2 pillow python-magic testresources requests opencv-python-headless pypresence pyuic5-tool cx_FREEZE psutil PyQt5==5.12 loguru sympy pyinstaller torch torchvision && sudo apt install libnotify-bin -y 
         
       - name: Compile to executable
-        run: cd REAL-Video-Enhancer && make
+        run: cd REAL-Video-Enhancer && make && python3 -m PyInstaller main.py
 
       - name: Clone appimage repo
         run: git clone https://github.com/TNTwise/REAL-Video-Enhancer-AppImage.git
