@@ -1,0 +1,140 @@
+ # This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the workflow will run
+
+on:
+  #schedule:
+  #  - cron: "0 0 * * *"
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+  
+  
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-20.04
+    permissions: write-all  
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      
+      - uses: actions/checkout@v3
+      
+      - name: Checkout code
+        run: git clone https://github.com/TNTwise/REAL-Video-Enhancer-BETA.git
+        
+      # Runs a single command using the runners shell
+      - name: Log
+        run: ls
+      - name: Get last release
+        id: last_release
+        
+        run: |
+          cd REAL-Video-Enhancer-BETA
+          last_release_tag=$(git describe --tags --abbrev=0)
+          last_release_date=$(git log -1 --format="%aI" $last_release_tag)
+          echo "::set-output name=last_release_date::$last_release_date"
+
+      - name: Calculate time difference
+        id: calculate_time
+        run: |
+          current_date=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+          last_release_date=${{ steps.last_release.outputs.last_release_date }}
+          current_timestamp=$(date -d "$current_date" +%s)
+          release_timestamp=$(date -d "$last_release_date" +%s)
+          time_difference=$((current_timestamp - release_timestamp))
+          echo "::set-output name=time_difference::$time_difference"
+
+      - name: Display time difference
+        run: |
+          time_difference=${{ steps.calculate_time.outputs.time_difference }}
+          echo "Time since last release: $((time_difference / 86400)) days"
+
+      # Runs a set of commands using the runners shell
+      - name: Get latest version
+        run: git clone https://github.com/TNTwise/REAL-Video-Enhancer.git
+        
+      - name: Install python dependencies
+        run: cd REAL-Video-Enhancer && python3 -m pip install -r requirements.txt && python3 -m pip uninstall PyQt5 -y && python3 -m  pip install py-notifier notify2 pillow python-magic testresources requests opencv-python-headless pypresence pyuic5-tool cx_FREEZE psutil PyQt5==5.12 loguru sympy && sudo apt install libnotify-bin -y 
+        
+      - name: Compile to executable
+        run: cd REAL-Video-Enhancer && make
+
+      - name: Clone appimage repo
+        run: git clone https://github.com/TNTwise/REAL-Video-Enhancer-AppImage.git
+
+      - name: Move files
+        run: mkdir -p REAL-Video-Enhancer-AppImage/REAL-Video-Enhancer.AppDir/usr/bin/ && mv REAL-Video-Enhancer/dist/* REAL-Video-Enhancer-AppImage/REAL-Video-Enhancer.AppDir/usr/bin/ && mv REAL-Video-Enhancer-AppImage/REAL-Video-Enhancer.AppDir/usr/bin/main REAL-Video-Enhancer-AppImage/REAL-Video-Enhancer.AppDir/usr/bin/REAL-Video-Enhancer      
+      - name: Move QT Files
+        run: | 
+          wget https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage
+          chmod +x linuxdeployqt-continuous-x86_64.AppImage
+          ./linuxdeployqt-continuous-x86_64.AppImage --appimage-extract
+          rm -rf squashfs-root/usr/bin 
+          mv squashfs-root/usr/* REAL-Video-Enhancer-AppImage/REAL-Video-Enhancer.AppDir/usr/
+          rm -rf squashfs-root/
+          
+      - name: Make appimage
+        run: chmod +x REAL-Video-Enhancer-AppImage/appimagetool-x86_64.AppImage && cd REAL-Video-Enhancer-AppImage/ && ./appimagetool-x86_64.AppImage REAL-Video-Enhancer.AppDir/ 
+      
+      #  uses: actions/upload-artifact@v3
+      #  with:
+      #    name: REAL-Video-Enhancer
+      #    path: REAL-Video-Enhancer-AppImage/squashfs-root/usr/REAL-Video-Enhancer.tar.xz
+      - name: Generate version and tag
+        id: version_tag
+        run: |
+          version=$(python -c "from datetime import datetime; print(str(datetime.now()).split(' ')[0].replace('-',''))")
+          tag=$(python -c "import random, string; print(''.join(random.choices(string.ascii_letters, k=8)))")
+          commitlog=$(cd REAL-Video-Enhancer && git log --since="24 hours ago" --pretty=format:"%h - %s")
+          echo "Version=$version"
+          echo "Tag=$version"
+          echo "CommitLog=$commitlog"
+          echo "::set-output name=version::$version"
+          echo "::set-output name=tag::$version"
+          echo "::set-output name=commitlog::$commitlog"
+      - name: Make Commit Log
+      
+        run: |
+             cd REAL-Video-Enhancer 
+             time_difference=${{ 604800 }}
+             hours=$((time_difference / 3600)) # Convert seconds to hours
+             git log --since="$hours hours ago" --pretty=format:"%h - %s" >> ../output.log
+      - name: Build project # This would actually build your project, using zip for an example artifact
+        run: |
+          zip --junk-paths  REAL-Video-Enhancer-Appimage README.md README.md
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.version_tag.outputs.tag }}
+          release_name: Release ${{ steps.version_tag.outputs.version }}
+          body_path: output.log # Use the commitlog as the release description
+          draft: false
+          prerelease: false
+          
+      - name: Upload Release Asset
+        
+        id: upload-release-asset 
+        uses: actions/upload-release-asset@v1
+        
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+          asset_path: REAL-Video-Enhancer-AppImage/REAL-Video-Enhancer-x86_64.AppImage
+          asset_name: REAL-Video-Enhancer-x86_64.AppImage
+          asset_content_type: application/x-executable
+     
+            
