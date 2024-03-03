@@ -73,7 +73,7 @@ jobs:
         run: git clone https://github.com/TNTwise/REAL-Video-Enhancer-AppImage.git
 
       - name: Move files
-        run: mkdir -p REAL-Video-Enhancer-AppImage/REAL-Video-Enhancer.AppDir/usr/bin/ && mv REAL-Video-Enhancer/dist/* REAL-Video-Enhancer-AppImage/REAL-Video-Enhancer.AppDir/usr/bin/ && mv REAL-Video-Enhancer-AppImage/REAL-Video-Enhancer.AppDir/usr/bin/main REAL-Video-Enhancer-AppImage/REAL-Video-Enhancer.AppDir/usr/bin/REAL-Video-Enhancer      
+        run: mkdir -p REAL-Video-Enhancer-AppImage/REAL-Video-Enhancer.AppDir/usr/bin/ && mv REAL-Video-Enhancer/dist/main/* REAL-Video-Enhancer-AppImage/REAL-Video-Enhancer.AppDir/usr/bin/ && mv REAL-Video-Enhancer-AppImage/REAL-Video-Enhancer.AppDir/usr/bin/main REAL-Video-Enhancer-AppImage/REAL-Video-Enhancer.AppDir/usr/bin/REAL-Video-Enhancer      
       - name: Move QT Files
         run: | 
           wget https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage
