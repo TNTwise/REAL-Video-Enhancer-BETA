@@ -84,7 +84,7 @@ jobs:
           rm -rf squashfs-root/
           
       - name: Make appimage
-        run: chmod +x REAL-Video-Enhancer-AppImage/appimagetool-x86_64.AppImage && cd REAL-Video-Enhancer-AppImage/ && ./appimagetool-x86_64.AppImage REAL-Video-Enhancer.AppDir/ 
+        run: chmod +x REAL-Video-Enhancer-AppImage/appimagetool-x86_64.AppImage && cd REAL-Video-Enhancer-AppImage/ && ./appimagetool-x86_64.AppImage --comp xz -9e REAL-Video-Enhancer.AppDir/ 
       
       #  uses: actions/upload-artifact@v3
       #  with:
@@ -112,9 +112,9 @@ jobs:
       - name: Build project # This would actually build your project, using zip for an example artifact
         run: |
           zip --junk-paths  REAL-Video-Enhancer-Appimage README.md README.md
-      - name: hella compress this shit
-        run: |
-             tar -cf - REAL-Video-Enhancer-AppImage/REAL-Video-Enhancer.AppDir/usr/bin/ | xz -9e > REAL-Video-Enhancer-x86_64.AppImage.tar.xz 
+  # - name: hella compress this shit
+   #     run: |
+    #         tar -cf - REAL-Video-Enhancer-AppImage/REAL-Video-Enhancer.AppDir/usr/bin/ | xz -9e > REAL-Video-Enhancer-x86_64.AppImage.tar.xz 
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -136,8 +136,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-          asset_path: REAL-Video-Enhancer-x86_64.AppImage.tar.xz
-          asset_name: REAL-Video-Enhancer-x86_64.AppImage.zip
-          asset_content_type: application/zip
+          asset_path: REAL-Video-Enhancer-AppImage/REAL-Video-Enhancer-x86_64.AppImage
+          asset_name: REAL-Video-Enhancer-x86_64.AppImage
+          asset_content_type: application/x-executable
      
             
