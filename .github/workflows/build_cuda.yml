@@ -84,7 +84,7 @@ jobs:
           rm -rf squashfs-root/
           
       - name: Make appimage
-        run: chmod +x REAL-Video-Enhancer-AppImage/appimagetool-x86_64.AppImage && cd REAL-Video-Enhancer-AppImage/ && ./appimagetool-x86_64.AppImage --comp xz -9e REAL-Video-Enhancer.AppDir/ 
+        run: chmod +x REAL-Video-Enhancer-AppImage/appimagetool-x86_64.AppImage && cd REAL-Video-Enhancer-AppImage/ && XZ_OPT=-9e ./appimagetool-x86_64.AppImage --comp xz  REAL-Video-Enhancer.AppDir/ 
       
       #  uses: actions/upload-artifact@v3
       #  with:
