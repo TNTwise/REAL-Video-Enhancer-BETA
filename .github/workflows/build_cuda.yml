@@ -9,8 +9,12 @@ on:
   #  - cron: "0 0 * * *"
   push:
     branches: [ "main" ]
+    paths-ignore:
+       - '**/.github/workflows/build_mac.yml'
+       - '**/.github/workflows/blank.yml'
   pull_request:
     branches: [ "main" ]
+  
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:

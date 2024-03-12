@@ -9,6 +9,9 @@ on:
   #  - cron: "0 0 * * *"
   push:
     branches: [ "main" ]
+    paths-ignore:
+       - '**/.github/workflows/build_mac.yml'
+       - '**/.github/workflows/build_cuda.yml'
   pull_request:
     branches: [ "main" ]
 
