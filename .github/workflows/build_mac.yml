@@ -97,12 +97,12 @@ jobs:
           tar -caf REAL-Video-Enhancer.tar.xz bin/
          
        
-        
-      #- name: Save AppImage as artifact
-      #  uses: actions/upload-artifact@v3
-      #  with:
-      #    name: REAL-Video-Enhancer-Appimage
-      #    path: REAL-Video-Enhancer-AppImage/REAL-Video-Enhancer-x86_64.AppImage
+      
+      - name: Save AppImage as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: REAL-Video-Enhancer.tar.xz
+          path: REAL-Video-Enhancer.tar.xz
       
       #- name: Log
       #  run: ls
@@ -119,7 +119,7 @@ jobs:
         with:
           tag_name: ${{ steps.version_tag.outputs.tag }}-MAC
           release_name: Release ${{ steps.version_tag.outputs.version }}-MAC
-          body_path: mac # Use the commitlog as the release description
+           # Use the commitlog as the release description
           draft: false
           prerelease: false
           
