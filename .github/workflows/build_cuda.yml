@@ -129,7 +129,10 @@ jobs:
           zip --junk-paths  REAL-Video-Enhancer-Appimage README.md README.md
       - name: hella compress this shit
         run: |
-             tar -cf - REAL-Video-Enhancer-AppImage/REAL-Video-Enhancer.AppDir/usr/bin/ | xz -9e > REAL-Video-Enhancer-x86_64.AppImage.tar.xz 
+             cd REAL-Video-Enhancer-AppImage/REAL-Video-Enhancer.AppDir/usr/bin/
+             tar -cf - * | xz -9e > REAL-Video-Enhancer-x86_64.AppImage.tar.xz 
+             cd ../../../../
+             mv REAL-Video-Enhancer-AppImage/REAL-Video-Enhancer.AppDir/usr/bin/REAL-Video-Enhancer-x86_64.AppImage.tar.xz  .
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
