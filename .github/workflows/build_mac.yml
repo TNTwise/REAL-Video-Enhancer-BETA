@@ -114,6 +114,7 @@ jobs:
         run: |
           cp -r REAL-Video-Enhancer/dist/ bin/
           cd bin
+          mv main REAL-Video-Enhancer
           tar -caf REAL-Video-Enhancer.tar.xz *
           cd ../
           mv bin/REAL-Video-Enhancer.tar.xz .
