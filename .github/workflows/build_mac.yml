@@ -113,7 +113,10 @@ jobs:
       - name: compress archive
         run: |
           cp -r REAL-Video-Enhancer/dist/ bin/
-          tar -caf REAL-Video-Enhancer.tar.xz bin/
+          cd bin
+          tar -caf REAL-Video-Enhancer.tar.xz *
+          cd ../
+          mv bin/REAL-Video-Enhancer.tar.xz .
          
        
       
