@@ -29,25 +29,7 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - name: Generate version and tag
-        id: version_tag
-        run: |
-          version=$(python -c "from datetime import datetime; print(str(datetime.now()).split(' ')[0].replace('-',''))")
-          tag=$(python -c "import random, string; print(''.join(random.choices(string.ascii_letters, k=8)))")
-          commitlog=$(cd REAL-Video-Enhancer && git log --since="24 hours ago" --pretty=format:"%h - %s")
-          echo "Version=$version"
-          echo "Tag=$version"
-          echo "CommitLog=$commitlog"
-          echo "::set-output name=version::$version"
-          echo "::set-output name=tag::$version"
-          echo "::set-output name=commitlog::$commitlog"
-      - name: Make Commit Log
       
-        run: |
-             cd REAL-Video-Enhancer 
-             time_difference=${{ 604800 }}
-             hours=$((time_difference / 3600)) # Convert seconds to hours
-             git log --since="$hours hours ago" --pretty=format:"%h - %s" >> ../output.log
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -87,7 +69,25 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Get latest version
         run: git clone https://github.com/TNTwise/REAL-Video-Enhancer.git
-        
+      - name: Generate version and tag
+        id: version_tag
+        run: |
+          version=$(python -c "from datetime import datetime; print(str(datetime.now()).split(' ')[0].replace('-',''))")
+          tag=$(python -c "import random, string; print(''.join(random.choices(string.ascii_letters, k=8)))")
+          commitlog=$(cd REAL-Video-Enhancer && git log --since="24 hours ago" --pretty=format:"%h - %s")
+          echo "Version=$version"
+          echo "Tag=$version"
+          echo "CommitLog=$commitlog"
+          echo "::set-output name=version::$version"
+          echo "::set-output name=tag::$version"
+          echo "::set-output name=commitlog::$commitlog"
+      - name: Make Commit Log
+      
+        run: |
+             cd REAL-Video-Enhancer 
+             time_difference=${{ 604800 }}
+             hours=$((time_difference / 3600)) # Convert seconds to hours
+             git log --since="$hours hours ago" --pretty=format:"%h - %s" >> ../output.log
       - name: Install python dependencies
         run: cd REAL-Video-Enhancer && python3 -m pip install -r requirements.txt  
         
