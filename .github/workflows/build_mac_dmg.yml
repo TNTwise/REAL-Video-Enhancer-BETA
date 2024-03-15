@@ -13,6 +13,7 @@ on:
        - '**/.github/workflows/build_cuda.yml'
        - '**/.github/workflows/blank.yml'
        - '**/.github/workflows/build_mac.yml'
+       - '**/.github/workflows/*'
   pull_request:
     branches: [ "main" ]
 
