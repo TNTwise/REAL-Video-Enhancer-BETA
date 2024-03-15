@@ -119,7 +119,6 @@ jobs:
           ln -s /Applications REAL-Video-Enhancer-MacOS/DMG/Applications
           cd REAL-Video-Enhancer-MacOS/
           xattr -cr DMG/REAL-Video-Enhancer.app
-          xattr -d com.apple.quarantine DMG/REAL-Video-Enhancer.app
           hdiutil create -volname "REAL Video Enhancer" -srcfolder DMG -ov -format UDZO REAL-Video-Enhancer.dmg
           cd ..
           mv REAL-Video-Enhancer-MacOS/REAL-Video-Enhancer.dmg ./
