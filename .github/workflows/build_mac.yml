@@ -115,19 +115,20 @@ jobs:
           cp -r REAL-Video-Enhancer/dist/ bin/
           git clone https://github.com/TNTwise/REAL-Video-Enhancer-MacOS.git
           mv bin/* REAL-Video-Enhancer-MacOS/DMG/REAL-Video-Enhancer.app/Contents/MacOS/
-          ln -s /Applications REAL-Video-Enhancer-MacOS/DMG/Applications
-          cd REAL-Video-Enhancer-MacOS/
-          hdiutil create -volname "REAL Video Enhancer" -srcfolder DMG -ov -format UDZO REAL-Video-Enhancer.dmg
-          cd ..
-          mv REAL-Video-Enhancer-MacOS/REAL-Video-Enhancer.dmg ./
+          
+     #     ln -s /Applications REAL-Video-Enhancer-MacOS/DMG/Applications
+     #     cd REAL-Video-Enhancer-MacOS/
+     #     hdiutil create -volname "REAL Video Enhancer" -srcfolder DMG -ov -format UDZO REAL-Video-Enhancer.dmg
+     ##     cd ..
+     #     mv REAL-Video-Enhancer-MacOS/REAL-Video-Enhancer.dmg ./
           
        
       
       - name: Save AppImage as artifact
         uses: actions/upload-artifact@v3
         with:
-          name: REAL-Video-Enhancer.dmg
-          path: REAL-Video-Enhancer.dmg
+          name: REAL-Video-Enhancer.app
+          path: REAL-Video-Enhancer-MacOS/DMG/REAL-Video-Enhancer.app/
       
       #- name: Log
       #  run: ls
@@ -157,8 +158,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-          asset_path: REAL-Video-Enhancer.dmg
-          asset_name: REAL-Video-Enhancer.dmg
+          asset_path: REAL-Video-Enhancer-MacOS/DMG/REAL-Video-Enhancer.app/
+          asset_name: REAL-Video-Enhancer.app
           asset_content_type: application/x-executable
 
 
