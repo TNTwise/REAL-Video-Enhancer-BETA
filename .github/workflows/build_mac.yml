@@ -116,7 +116,10 @@ jobs:
           git clone https://github.com/TNTwise/REAL-Video-Enhancer-MacOS.git
           mv bin/* REAL-Video-Enhancer-MacOS/DMG/REAL-Video-Enhancer.app/Contents/MacOS/
           ln -s /Applications REAL-Video-Enhancer-MacOS/DMG/Applications
-          hdiutil create -volname "REAL Video Enhancer" -srcfolder REAL-Video-Enhancer-MacOS/DMG -ov -format UDZO REAL-Video-Enhancer.dmg
+          cd REAL-Video-Enhancer-MacOS/
+          hdiutil create -volname "REAL Video Enhancer" -srcfolder DMG -ov -format UDZO REAL-Video-Enhancer.dmg
+          cd ..
+          mv REAL-Video-Enhancer-MacOS/ REAL-Video-Enhancer.dmg
           
        
       
