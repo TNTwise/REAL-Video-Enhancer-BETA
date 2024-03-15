@@ -1,0 +1,170 @@
+ # This is a basic workflow to help you get started with Actions
+
+name: MAC
+
+# Controls when the workflow will run
+
+on:
+  #schedule:
+  #  - cron: "0 0 * * *"
+  push:
+    branches: [ "main" ]
+    paths-ignore:
+       - '**/.github/workflows/build_cuda.yml'
+       - '**/.github/workflows/blank.yml'
+  pull_request:
+    branches: [ "main" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+  
+  
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: macos-12
+    permissions: write-all  
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.11
+      - name: checks
+        run: | 
+          mkdir -p /Applications/Postgres.app/Contents/Versions/9.6/lib/
+          brew reinstall postgresql
+          cp -r /usr/local/Cellar/postgresql@14/14.11/lib/postgresql@14/* /Applications/Postgres.app/Contents/Versions/9.6/lib/
+          
+
+          brew update
+          brew reinstall libiodbc
+          export LDFLAGS="-L/usr/local/opt/libiodbc/lib"
+          export CPPFLAGS="-I/usr/local/opt/libiodbc/include"
+          export PKG_CONFIG_PATH="/usr/local/opt/libiodbc/lib/pkgconfig"
+      - uses: actions/checkout@v3
+       
+      - name: Checkout code
+        run: git clone https://github.com/TNTwise/REAL-Video-Enhancer-BETA.git
+        
+      # Runs a single command using the runners shell
+      - name: Log
+        run: ls
+      - name: Get last release
+        id: last_release
+        
+        run: |
+          cd REAL-Video-Enhancer-BETA
+          last_release_tag=$(git describe --tags --abbrev=0)
+          last_release_date=$(git log -1 --format="%aI" $last_release_tag)
+          echo "::set-output name=last_release_date::$last_release_date"
+
+
+
+
+      # Runs a set of commands using the runners shell
+      - name: Get latest version
+        run: git clone https://github.com/TNTwise/REAL-Video-Enhancer.git
+      - name: Generate version and tag
+        id: version_tag
+        run: |
+          version=$(python -c "from datetime import datetime; print(str(datetime.now()).split(' ')[0].replace('-',''))")
+          tag=$(python -c "import random, string; print(''.join(random.choices(string.ascii_letters, k=8)))")
+          commitlog=$(cd REAL-Video-Enhancer && git log --since="24 hours ago" --pretty=format:"%h - %s")
+          echo "Version=$version"
+          echo "Tag=$version"
+          echo "CommitLog=$commitlog"
+          echo "::set-output name=version::$version"
+          echo "::set-output name=tag::$version"
+          echo "::set-output name=commitlog::$commitlog"
+      - name: Make Commit Log
+      
+        run: |
+             cd REAL-Video-Enhancer 
+             time_difference=${{ 604800 }}
+             hours=$((time_difference / 3600)) # Convert seconds to hours
+             git log --since="$hours hours ago" --pretty=format:"%h - %s" >> ../output.log
+      - name: Install python dependencies
+        run: cd REAL-Video-Enhancer && python3 -m pip install -r requirements.txt  
+        
+      - name: Compile to executable
+        run: |
+          
+          cd REAL-Video-Enhancer
+          
+          
+                    
+          python3 -m PyQt5.uic.pyuic mainwindow.ui > mainwindow.py
+          rm -rf dist
+          rm -rf build
+          mkdir dist
+          python3 -m PyQt5.uic.pyuic mainwindow.ui > mainwindow.py
+          python3 -m PyQt5.uic.pyuic src/getModels/SelectModels.ui > src/getModels/SelectModels.py
+          python3 -m PyQt5.uic.pyuic src/getModels/Download.ui > src/getModels/Download.py
+          python3 -m PyQt5.uic.pyuic src/getModels/SelectAI.ui > src/getModels/SelectAI.py
+          python3 -m PyQt5.uic.pyuic src/getLinkVideo/get_vid_from_link.ui > src/getLinkVideo/get_vid_from_link.py
+          python3 -m cx_Freeze -c main.py --target-dir dist/
+
+      
+      - name: make-DMG
+        run: |
+          cp -r REAL-Video-Enhancer/dist/ bin/
+          git clone https://github.com/TNTwise/REAL-Video-Enhancer-MacOS.git
+          mv bin/* REAL-Video-Enhancer-MacOS/DMG/REAL-Video-Enhancer.app/Contents/MacOS/
+          ln -s /Applications REAL-Video-Enhancer-MacOS/DMG/Applications
+          cd REAL-Video-Enhancer-MacOS/
+          hdiutil create -volname "REAL Video Enhancer" -srcfolder DMG -ov -format UDZO REAL-Video-Enhancer.dmg
+          cd ..
+          mv REAL-Video-Enhancer-MacOS/REAL-Video-Enhancer.dmg ./
+          
+       
+      
+      - name: Save AppImage as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: REAL-Video-Enhancer.dmg
+          path: REAL-Video-Enhancer.dmg
+      
+      #- name: Log
+      #  run: ls
+    
+
+      #
+    
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.version_tag.outputs.tag }}-MAC
+          release_name: Release ${{ steps.version_tag.outputs.version }}-MAC
+           # Use the commitlog as the release description
+          draft: false
+          prerelease: false
+          
+      
+      - name: Upload Release Asset
+        id: upload-release-asset2
+        uses: actions/upload-release-asset@v1
+        
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+          asset_path: REAL-Video-Enhancer.dmg
+          asset_name: REAL-Video-Enhancer.dmg
+          asset_content_type: application/x-executable
+
+
+  
+  
+  
+  
+          
+            
