@@ -12,6 +12,7 @@ on:
     paths-ignore:
        - '**/.github/workflows/build_cuda.yml'
        - '**/.github/workflows/blank.yml'
+       - '**/.github/workflows/build_mac.yml'
   pull_request:
     branches: [ "main" ]
 
