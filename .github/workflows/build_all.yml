@@ -137,7 +137,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: REAL-Video-Enhancer-CUDA.tar.xz
-          path: REAL-Video-Enhancer.tar.xz
+          path: REAL-Video-Enhancer-x86_64.AppImage.tar.xz 
   build-MacOS:
     # The type of runner that the job will run on
     runs-on: macos-12
