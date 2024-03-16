@@ -338,6 +338,7 @@ jobs:
       #- name: Log
       #  run: ls
   release:
+   permissions: write-all
    needs: [build-Cuda, build-MacOS, build-NCNN]
    runs-on: ubuntu-latest
    steps:
