@@ -32,18 +32,7 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - name: free_disk_space
-        run: |
-                dpkg-query -Wf '${Installed-Size}\t${Package}\n' | sort -n | tail -n 100
-                df -h
-                echo "Removing large packages"
-                sudo apt-get remove -y azure-cli google-cloud-sdk google-chrome-stable firefox powershell mono-devel
-                sudo apt-get autoremove -y
-                sudo apt-get clean
-                df -h
-                echo "Removing large directories"
-                rm -rf /usr/share/dotnet/
-                df -h
+     
       - uses: actions/checkout@v3
       
       - name: Checkout code
