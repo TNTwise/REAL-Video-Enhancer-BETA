@@ -363,8 +363,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
        with:
           tag_name: ${{ steps.version_tag.outputs.tag }}
-          release_name: Release ${{ steps.version_tag.outputs.version }}
-          body_path: output.log # Use the commitlog as the release description
+          release_name: Release ${{ steps.version_tag.outputs.version }}  # Use the commitlog as the release description
           draft: false
           prerelease: false
       
