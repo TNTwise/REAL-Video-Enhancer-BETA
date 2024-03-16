@@ -339,7 +339,7 @@ jobs:
       #  run: ls
   release:
    permissions: write-all
-   needs: [build-MacOS, build-NCNN] #[build-Cuda, build-MacOS, build-NCNN]
+   needs: [build-Cuda, build-MacOS, build-NCNN]
    runs-on: ubuntu-latest
    steps:
      - name: download
