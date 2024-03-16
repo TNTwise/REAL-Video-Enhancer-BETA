@@ -339,7 +339,7 @@ jobs:
       #  run: ls
   release:
    permissions: write-all
-   needs: [build-Cuda, build-MacOS, build-NCNN]
+   needs: [build-MacOS, build-NCNN] #[build-Cuda, build-MacOS, build-NCNN]
    runs-on: ubuntu-latest
    steps:
      - name: download
@@ -380,7 +380,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
        with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-          asset_path: artifacts/REAL-Video-Enhancer-Appimage
+          asset_path: artifacts/REAL-Video-Enhancer-Appimage/REAL-Video-Enhancer-x86_64.AppImage
           asset_name: REAL-Video-Enhancer-x86_64.AppImage
           asset_content_type: application/x-executable
      - name: Upload Release Asset
