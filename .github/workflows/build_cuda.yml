@@ -34,9 +34,6 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: free_disk_space
         run: |
-         try {
-       
-      
                 dpkg-query -Wf '${Installed-Size}\t${Package}\n' | sort -n | tail -n 100
                 df -h
                 echo "Removing large packages"
@@ -47,9 +44,6 @@ jobs:
                 echo "Removing large directories"
                 rm -rf /usr/share/dotnet/
                 df -h
-          } catch (error) {
-                ls
-          }
       - uses: actions/checkout@v3
       
       - name: Checkout code
