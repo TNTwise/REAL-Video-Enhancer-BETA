@@ -357,17 +357,11 @@ jobs:
           body: ${{ steps.version_tag.outputs.tag }}
           draft: false
           prerelease: true
-      - name: Upload Release Asset
-        id: upload-release-asset-ncnn
-        uses: actions/upload-release-asset@v1
+          
+          files: |
+              artifacts/REAL-Video-Enhancer-Appimage/REAL-Video-Enhancer-x86_64.AppImage
         
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-          asset_path: artifacts/REAL-Video-Enhancer-Appimage/REAL-Video-Enhancer-x86_64.AppImage
-          asset_name: REAL-Video-Enhancer-x86_64.AppImage
-          asset_content_type: application/x-executable
+      
   release1:
    permissions: write-all
    needs: [build-NCNN, build-Cuda]
