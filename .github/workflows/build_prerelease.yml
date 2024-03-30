@@ -117,11 +117,12 @@ jobs:
              tar -cf - * | xz -9e > REAL-Video-Enhancer-x86_64.AppImage.tar.xz 
              cd ../../../../
              mv REAL-Video-Enhancer-AppImage/REAL-Video-Enhancer.AppDir/usr/bin/REAL-Video-Enhancer-x86_64.AppImage.tar.xz  .
+             mv REAL-Video-Enhancer-x86_64.AppImage.tar.xz REAL-Video-Enhancer-CUDA.tar.xz
       - name: Save CUDA Archive as artifact
         uses: actions/upload-artifact@v3
         with:
           name: REAL-Video-Enhancer-CUDA.tar.xz
-          path: REAL-Video-Enhancer-x86_64.AppImage.tar.xz 
+          path: REAL-Video-Enhancer-CUDA.tar.xz
   build-MacOS:
     # The type of runner that the job will run on
     runs-on: macos-12
@@ -355,7 +356,7 @@ jobs:
           files: |
               artifacts/REAL-Video-Enhancer-Appimage/REAL-Video-Enhancer-x86_64.AppImage
               artifacts/REAL-Video-Enhancer-MacOS-x86_64.tar.xz/REAL-Video-Enhancer-MacOS-x86_64.tar.xz
-              artifacts/REAL-Video-Enhancer-CUDA.tar.xz/REAL-Video-Enhancer-x86_64.AppImage.tar.xz 
+              artifacts/REAL-Video-Enhancer-CUDA.tar.xz/REAL-Video-Enhancer-CUDA.tar.xz
               
               
         
