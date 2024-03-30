@@ -6,13 +6,7 @@ name: build-prerelease
 on:
   #schedule:
   #  - cron: "0 0 * * *"
-  push:
-    branches: [ "main" ]
-    paths-ignore:
-       - '**/.github/workflows/build_mac.yml'
-       - '**/.github/workflows/blank.yml'
-       - '**/.github/workflows/build_mac_dmg.yml'
-       - '**/.github/workflows/*'
+  
   pull_request:
     branches: [ "main" ]
   
@@ -328,7 +322,7 @@ jobs:
       #- name: Log
       #  run: ls
   Release:
-    needs: [build-NCNN, build-MacOS]
+    needs: [build-NCNN, build-Cuda, build-MacOS]
     runs-on: ubuntu-latest
     permissions:
       contents: write
