@@ -335,7 +335,7 @@ jobs:
     steps:
       - uses: actions/download-artifact@v3
         with:
-          path: asset
+          path: artifacts
 
      
           
