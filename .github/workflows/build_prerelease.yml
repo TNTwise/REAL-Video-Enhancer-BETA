@@ -328,7 +328,7 @@ jobs:
       #- name: Log
       #  run: ls
   Release:
-    needs: [build-Cuda, build-MacOS, build-NCNN]
+    needs: [build-NCNN]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v3
