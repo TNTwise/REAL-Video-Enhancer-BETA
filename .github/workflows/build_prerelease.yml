@@ -372,7 +372,7 @@ jobs:
           asset_content_type: application/x-executable
   release1:
    permissions: write-all
-   needs: [build-NCNN]
+   needs: [build-NCNN, build-Cuda]
    runs-on: ubuntu-latest
    steps:
      - name: download
