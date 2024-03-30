@@ -7,8 +7,7 @@ on:
   #schedule:
   #  - cron: "0 0 * * *"
   
-  pull_request:
-    branches: [ "main" ]
+ 
   
 
   # Allows you to run this workflow manually from the Actions tab
@@ -347,7 +346,7 @@ jobs:
       - name: Create Release and Upload Release Asset
         uses: softprops/action-gh-release@v1
         with:
-          name: prerelease
+          name: Pre-Release Build
           tag_name: prerelease
           body: ${{ steps.version_tag.outputs.tag }}
           draft: false
