@@ -224,14 +224,14 @@ jobs:
           tar -caf REAL-Video-Enhancer.tar.xz *
           cd ../
           mv bin/REAL-Video-Enhancer.tar.xz .
-         
+          mv REAL-Video-Enhancer.tar.xz REAL-Video-Enhancer-MacOS-x86_64.tar.xz
        
       
       - name: Save Archive as artifact
         uses: actions/upload-artifact@v3
         with:
           name: REAL-Video-Enhancer-MacOS-x86_64.tar.xz
-          path: REAL-Video-Enhancer.tar.xz
+          path: REAL-Video-Enhancer-MacOS-x86_64.tar.xz
           
   build-NCNN:
     # The type of runner that the job will run on
@@ -328,7 +328,7 @@ jobs:
       #- name: Log
       #  run: ls
   Release:
-    needs: [build-NCNN]
+    needs: [build-NCNN, build-MacOS]
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -360,90 +360,10 @@ jobs:
           
           files: |
               artifacts/REAL-Video-Enhancer-Appimage/REAL-Video-Enhancer-x86_64.AppImage
+              artifacts/REAL-Video-Enhancer-MacOS-x86_64.tar.xz/REAL-Video-Enhancer-MacOS-x86_64.tar.xz
+              artifacts/REAL-Video-Enhancer-CUDA.tar.xz/REAL-Video-Enhancer-x86_64.AppImage.tar.xz 
+              
+              
         
-      
-  release1:
-   permissions: write-all
-   needs: [build-NCNN, build-Cuda]
-   runs-on: ubuntu-latest
-   steps:
-     - name: download
-       uses: actions/download-artifact@v2
-       with:
-        path: artifacts
 
-     - name: Generate version and tag
-       id: version_tag
-       run: |
-          version=$(python -c "from datetime import datetime; print(str(datetime.now()).split(' ')[0].replace('-',''))")
-          tag=$(python -c "import random, string; print(''.join(random.choices(string.ascii_letters, k=8)))")
-          echo "Version=$version"
-          echo "Tag=$version"
-          echo "::set-output name=version::$version"
-          echo "::set-output name=tag::$version"
-          
-     - name: Create Release
-       id: create_release
-       uses: actions/create-release@v1
-       env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-       with:
-          tag_name: ${{ steps.version_tag.outputs.tag }}
-          release_name: Release ${{ steps.version_tag.outputs.version }}  # Use the commitlog as the release description
-          draft: false
-          prerelease: false
-     - name: log
-       run: |
-         cd artifacts/
-         ls
-     - name: Upload Release Asset
-        
-       id: upload-release-asset-ncnn
-       uses: actions/upload-release-asset@v1
-        
-       env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-       with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-          asset_path: artifacts/REAL-Video-Enhancer-Appimage/REAL-Video-Enhancer-x86_64.AppImage
-          asset_name: REAL-Video-Enhancer-x86_64.AppImage
-          asset_content_type: application/x-executable
-     
-     - name: Upload Release Asset
-        
-       id: upload-release-asset-ncnn2
-       uses: actions/upload-release-asset@v1
-        
-       env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-       with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-          asset_path: artifacts/REAL-Video-Enhancer-FLATPAK.tar.xz/REAL-Video-Enhancer.tar.xz
-          asset_name: REAL-Video-Enhancer-FLATPAK.tar.xz
-          asset_content_type: application/x-tar
-     - name: Upload Release Asset
-        
-       id: upload-release-asset-macos
-       uses: actions/upload-release-asset@v1
-        
-       env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-       with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-          asset_path: artifacts/REAL-Video-Enhancer-MacOS-x86_64.tar.xz/REAL-Video-Enhancer.tar.xz
-          asset_name: REAL-Video-Enhancer-MacOS-x86_64.tar.xz
-          asset_content_type: application/x-tar
-
-     - name: Upload Release Asset
-        
-       id: upload-release-asset-cuda
-       uses: actions/upload-release-asset@v1
-        
-       env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-       with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-          asset_path: artifacts/REAL-Video-Enhancer-CUDA.tar.xz/REAL-Video-Enhancer-x86_64.AppImage.tar.xz 
-          asset_name: REAL-Video-Enhancer-CUDA.tar.xz
-          asset_content_type: application/x-tar
      
