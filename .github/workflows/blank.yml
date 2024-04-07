@@ -24,7 +24,7 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
-  build:
+  build-NCNN:
     # The type of runner that the job will run on
     runs-on: ubuntu-20.04
     permissions: write-all  
@@ -69,7 +69,7 @@ jobs:
         run: git clone https://github.com/TNTwise/REAL-Video-Enhancer.git
         
       - name: Install python dependencies
-        run: cd REAL-Video-Enhancer && python3 -m pip install -r requirements.txt && python3 -m pip uninstall PyQt5 -y && python3 -m  pip install py-notifier notify2 pillow python-magic testresources requests opencv-python-headless pypresence pyuic5-tool cx_FREEZE psutil PyQt5==5.12 loguru sympy 
+        run: cd REAL-Video-Enhancer && python3 -m pip install -r requirements.txt && python3 -m pip uninstall PyQt5 -y && python3 -m  pip install py-notifier notify2 pillow python-magic testresources requests opencv-python-headless pypresence pyuic5-tool cx_FREEZE psutil PyQt5==5.12 loguru sympy && sudo apt install libnotify-bin -y 
         
       - name: Compile to executable
         run: cd REAL-Video-Enhancer && make
@@ -90,9 +90,9 @@ jobs:
           
       - name: Make appimage
         run: chmod +x REAL-Video-Enhancer-AppImage/appimagetool-x86_64.AppImage && cd REAL-Video-Enhancer-AppImage/ && ./appimagetool-x86_64.AppImage REAL-Video-Enhancer.AppDir/ 
-      - name: Make archive ### && sudo apt install python3-pyqt5 -y 
+      - name: Make archive
         run: |
-          python3 -m pip uninstall PyQt5 -y 
+          python3 -m pip uninstall PyQt5 -y && sudo apt install python3-pyqt5 -y
           mkdir archive-build && cd archive-build
           git clone https://github.com/TNTwise/REAL-Video-Enhancer.git && cd REAL-Video-Enhancer && make && mv dist/main dist/REAL-Video-Enhancer
           rm -rf bin/
@@ -105,97 +105,19 @@ jobs:
          
        
         
-      #- name: Save AppImage as artifact
-      #  uses: actions/upload-artifact@v3
-      #  with:
-      #    name: REAL-Video-Enhancer-Appimage
-      #    path: REAL-Video-Enhancer-AppImage/REAL-Video-Enhancer-x86_64.AppImage
-      
+      - name: Save AppImage as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: REAL-Video-Enhancer-Appimage
+          path: REAL-Video-Enhancer-AppImage/REAL-Video-Enhancer-x86_64.AppImage
+          
+      - name: Save Flatpak Archive as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: REAL-Video-Enhancer-FLATPAK.tar.xz
+          path: REAL-Video-Enhancer.tar.xz
       #- name: Log
       #  run: ls
-    
-      - name: extract appimage and upload artifact
-        run: sha256sum REAL-Video-Enhancer.tar.xz >> sha256
-      #- name: Save extracted files as artifact
-      #  uses: actions/upload-artifact@v3
-      #  with:
-      #    name: REAL-Video-Enhancer
-      #    path: REAL-Video-Enhancer-AppImage/squashfs-root/usr/REAL-Video-Enhancer.tar.xz
-      - name: Generate version and tag
-        id: version_tag
-        run: |
-          version=$(python3 -c "from datetime import datetime; print(str(datetime.now()).split(' ')[0].replace('-',''))")
-          tag=$(python3 -c "import random, string; print(''.join(random.choices(string.ascii_letters, k=8)))")
-          commitlog=$(cd REAL-Video-Enhancer && git log --since="24 hours ago" --pretty=format:"%h - %s")
-          echo "Version=$version"
-          echo "Tag=$version"
-          echo "CommitLog=$commitlog"
-          echo "::set-output name=version::$version"
-          echo "::set-output name=tag::$version"
-          echo "::set-output name=commitlog::$commitlog"
-      - name: Make Commit Log
-      
-        run: |
-             cd REAL-Video-Enhancer 
-             time_difference=${{ 604800 }}
-             hours=$((time_difference / 3600)) # Convert seconds to hours
-             git log --since="$hours hours ago" --pretty=format:"%h - %s" >> ../output.log
-      - name: Build project # This would actually build your project, using zip for an example artifact
-        run: |
-          zip --junk-paths  REAL-Video-Enhancer-Appimage README.md README.md
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ steps.version_tag.outputs.tag }}-NCNN
-          release_name: Release ${{ steps.version_tag.outputs.version }}-NCNN
-          body_path: output.log # Use the commitlog as the release description
-          draft: false
-          prerelease: false
-          
-      - name: Upload Release Asset
-        
-        id: upload-release-asset 
-        uses: actions/upload-release-asset@v1
-        
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-          asset_path: REAL-Video-Enhancer-AppImage/REAL-Video-Enhancer-x86_64.AppImage
-          asset_name: REAL-Video-Enhancer-x86_64.AppImage
-          asset_content_type: application/x-executable
-      - name: Upload Release Asset
-        id: upload-release-asset2
-        uses: actions/upload-release-asset@v1
-        
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-          asset_path: REAL-Video-Enhancer.tar.xz
-          asset_name: REAL-Video-Enhancer.tar.xz
-          asset_content_type: application/x-tar
-
-      - name: Upload Release Asset
-        id: upload-release-asset256
-        uses: actions/upload-release-asset@v1
-        
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-          asset_path: sha256
-          asset_name: sha256
-          asset_content_type: text/plain
-        #- name: Save build as artifact
-         # uses: actions/upload-artifact@v3
-          #with:
-           # name: BUILD
-            #path: REAL-Video-Enhancer-AppImage/REAL-Video-Enhancer.AppDir/usr/bin/*
-  
   
   
   
