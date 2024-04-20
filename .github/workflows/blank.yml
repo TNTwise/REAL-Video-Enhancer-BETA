@@ -38,8 +38,11 @@ jobs:
         run: git clone https://github.com/TNTwise/REAL-Video-Enhancer-BETA.git
         
       # Runs a single command using the runners shell
-      - name: Log
-        run: ls
+      - name: install libomp
+        run: |
+         apt install -y libomp5 libvulkan-dev -y
+         cd /usr/lib
+         sudo ln -s libomp.so libomp.so.5
       - name: Get last release
         id: last_release
         
@@ -69,7 +72,7 @@ jobs:
         run: git clone https://github.com/TNTwise/REAL-Video-Enhancer.git
         
       - name: Install python dependencies
-        run: cd REAL-Video-Enhancer && python3 -m pip install -r requirements.txt && python3 -m pip uninstall PyQt5 -y && python3 -m  pip install py-notifier notify2 pillow python-magic testresources requests opencv-python-headless pypresence pyuic5-tool cx_FREEZE psutil PyQt5==5.12 loguru sympy && sudo apt install libnotify-bin -y 
+        run: cd REAL-Video-Enhancer && python3 -m pip install -r requirements.txt && python3 -m pip uninstall PyQt5 -y && python3 -m  pip install py-notifier notify2 pillow python-magic testresources requests opencv-python-headless pypresence pyuic5-tool cx_FREEZE psutil PyQt5==5.12  loguru sympy && sudo apt install libnotify-bin -y 
         
       - name: Compile to executable
         run: cd REAL-Video-Enhancer && make
