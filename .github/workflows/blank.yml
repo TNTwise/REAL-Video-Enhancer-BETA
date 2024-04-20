@@ -40,7 +40,7 @@ jobs:
       # Runs a single command using the runners shell
       - name: install libomp
         run: |
-         apt install -y libomp5 libvulkan-dev -y
+         sudo apt install -y libomp5 libvulkan-dev -y
          cd /usr/lib
          sudo ln -s libomp.so libomp.so.5
       - name: Get last release
