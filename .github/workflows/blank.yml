@@ -72,7 +72,7 @@ jobs:
         run: git clone https://github.com/TNTwise/REAL-Video-Enhancer.git
         
       - name: Install python dependencies
-        run: cd REAL-Video-Enhancer && python3 -m pip install -r requirements.txt && python3 -m pip uninstall PyQt5 -y && python3 -m  pip install https://github.com/TNTwise/Universal-NCNN-upscaler-python/releases/download/2024-04-20-rve/upscale_ncnn_py-1.2.0-cp38-none-manylinux1_x86_64.whl py-notifier notify2 pillow python-magic testresources requests opencv-python-headless pypresence pyuic5-tool cx_FREEZE psutil PyQt5==5.12  loguru sympy && sudo apt install libnotify-bin -y 
+        run: cd REAL-Video-Enhancer && python3 -m pip install -r requirements.txt && python3 -m pip uninstall PyQt5 -y && python3 -m  pip install https://github.com/TNTwise/realcugan-ncnn-py/releases/download/2024-04-22-rve/realcugan_ncnn_py-2.0.0-cp38-none-manylinux1_x86_64.whl https://github.com/TNTwise/Universal-NCNN-upscaler-python/releases/download/2024-04-20-rve/upscale_ncnn_py-1.2.0-cp38-none-manylinux1_x86_64.whl py-notifier notify2 pillow python-magic testresources requests opencv-python-headless pypresence pyuic5-tool cx_FREEZE psutil PyQt5==5.12  loguru sympy && sudo apt install libnotify-bin -y 
         
       - name: Compile to executable
         run: cd REAL-Video-Enhancer && make
