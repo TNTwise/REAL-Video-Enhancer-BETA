@@ -96,7 +96,7 @@ jobs:
       - name: Make archive
         run: |
           python3 -m pip install cx-Freeze==6.15.15 --force --no-cache-dir
-          python3 -m pip uninstall PyQt5
+          python3 -m pip uninstall PyQt5 -y
           mkdir archive-build && cd archive-build
           git clone https://github.com/TNTwise/REAL-Video-Enhancer.git && cd REAL-Video-Enhancer && make && mv dist/main dist/REAL-Video-Enhancer
           rm -rf bin/
