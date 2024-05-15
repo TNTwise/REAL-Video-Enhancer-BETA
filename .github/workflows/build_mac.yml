@@ -117,17 +117,17 @@ jobs:
           cp -r REAL-Video-Enhancer/dist/ bin/
           cd bin
           mv main REAL-Video-Enhancer
-          tar -caf REAL-Video-Enhancer.tar.xz *
+          tar -czf REAL-Video-Enhancer.tar.gz *
           cd ../
-          mv bin/REAL-Video-Enhancer.tar.xz .
+          mv bin/REAL-Video-Enhancer.tar.gz .
          
        
       
       - name: Save AppImage as artifact
         uses: actions/upload-artifact@v3
         with:
-          name: REAL-Video-Enhancer.tar.xz
-          path: REAL-Video-Enhancer.tar.xz
+          name: REAL-Video-Enhancer.tar.gz
+          path: REAL-Video-Enhancer.tar.gz
       
       #- name: Log
       #  run: ls
