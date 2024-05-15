@@ -91,7 +91,8 @@ jobs:
              hours=$((time_difference / 3600)) # Convert seconds to hours
              git log --since="$hours hours ago" --pretty=format:"%h - %s" >> ../output.log
       - name: Install python dependencies
-        run: cd REAL-Video-Enhancer && python3 -m pip install -r requirements.txt  
+        run: cd REAL-Video-Enhancer && python3 -m pip install -r requirements.txt  && python3 -m pip install -r requirements-MAC.txt  
+            
         
       - name: Compile to executable
         run: |
@@ -109,7 +110,7 @@ jobs:
           python3 -m PyQt5.uic.pyuic src/getModels/Download.ui > src/getModels/Download.py
           python3 -m PyQt5.uic.pyuic src/getModels/SelectAI.ui > src/getModels/SelectAI.py
           python3 -m PyQt5.uic.pyuic src/getLinkVideo/get_vid_from_link.ui > src/getLinkVideo/get_vid_from_link.py
-          python3 -m PyInstaller --onefile main.py 
+          python3 -m PyInstaller  main.py --hidden-import upscale_ncnn_py.upscale_ncnn_py_wrapper --hidden-import realcugan_ncnn_py.realcugan_ncnn_py_wrapper
 
       
       - name: compress archive
