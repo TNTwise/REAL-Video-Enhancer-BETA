@@ -42,7 +42,6 @@ jobs:
           brew reinstall postgresql
           cd /usr/local/Cellar/postgresql@14/14.11_1/
           ls
-          cp -r /usr/local/Cellar/postgresql@14/14.11_1/lib/postgresql@14/* /Applications/Postgres.app/Contents/Versions/9.6/lib/
           brew update
           brew reinstall libiodbc
           export LDFLAGS="-L/usr/local/opt/libiodbc/lib"
