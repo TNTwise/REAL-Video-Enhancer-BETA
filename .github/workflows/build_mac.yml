@@ -40,7 +40,6 @@ jobs:
         run: | 
           mkdir -p /Applications/Postgres.app/Contents/Versions/9.6/lib/
           brew reinstall postgresql
-          cd /usr/local/Cellar/postgresql@14/14.11_1/
           ls
           brew update
           brew reinstall libiodbc
